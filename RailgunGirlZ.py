@@ -6,8 +6,8 @@
 #
 # Synopsis: This is a game taking elements from my other game "Neko Quest", miHoYo's Gun GirlZ, and the Railgun series and combining it all into one game.
 #           Play as Mikoto Misaka as you fight your way through Academy City's toughest foes to save the city, once again, from the enemies that aim to
-#           destory Academy City.
-# How to Play: Use arrow keys to move/navigate, spacebar to attack.
+#           destroy Academy City.
+# How to Play: Use arrow / WASD keys to move/navigate, spacebar to attack.
 # Future Content: More characters, character selection.
 #
 # Released under the Creative Commons License 3.0
@@ -52,10 +52,10 @@ game_clock = pygame.time.Clock()
 ## 2.4 - Sound Effects and Music
 pygame.mixer.init()
 # 2.4.1 - Music
-# main_menu_music = pygame.mixer.music.load()
-# menu_music = pygame.mixer.music.load()
-# background_music = pygame.mixer.music.load()
-# pygame.mixer.music.play(-1)
+main_menu_music = pygame.mixer.music.load('resources/sounds/shopsation.mp3')
+menu_music = pygame.mixer.music.load('resources/sounds/shopsation.mp3')
+background_music = pygame.mixer.music.load('resources/sounds/kontrolle.mp3')
+pygame.mixer.music.play(-1)
 # 2.4.2 - Sound Effects
 # projectile_shoot_sound = pygame.mixer.Sound()
 # projectile_hit_sound = pygame.mixer.Sound()
@@ -66,10 +66,9 @@ pygame.mixer.init()
 ### 3 - Character Sprites / Images ###
 ## 3.1 - Background
 oBackground = pygame.image.load('resources/images/bgLee.jpg').convert()
-# oBackground = pygwidgets.Image(window, WINDOW_WIDTH, WINDOW_HEIGHT, 'images/bgLee.png')
 
 ## 3.2 - Mikoto Misaka Character Sprites
-oPlayer = Player(window, WINDOW_WIDTH, WINDOW_HEIGHT)  # 100, 500
+oPlayer = Player(window, WINDOW_WIDTH, WINDOW_HEIGHT)
 
 ## 3.3 - Enemey AI Character Sprites
 # enemyAI_look_left = [pygame.image.load()]

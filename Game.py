@@ -8,5 +8,5 @@ from pygame.locals import *
 import time
 from Player import *
 
-class Game():
-    def __init__(self, window):
+#class Game():
+   # def __init__(self, window):

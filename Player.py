@@ -45,13 +45,10 @@ class Player(object):
             self.faceRight = True
             self.idle = False
         elif keyPressedTuple[pygame.K_UP or pygame.K_w] and (self.y > (self.windowHeight / 1.7) - self.velocity):
-            # TODO: Move player character in an upward direction
             self.y -= self.velocity
         elif keyPressedTuple[pygame.K_DOWN or pygame.K_s] and (self.y < self.maxY - self.velocity):
-            # TODO: Move player character in a downward direction
             self.y += self.velocity
         else:
-            # TODO: Player is idle
             self.idle = True
             pass
 
