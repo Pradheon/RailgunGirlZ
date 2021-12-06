@@ -31,22 +31,26 @@ class Player(object):
         self.faceRight = False
         self.idle = True
 
-        self.velocity = 0.5
+        self.velocity = 5
 
     def handleEvents(self):
+        #xMovement = 0A
         keyPressedTuple = pygame.key.get_pressed()
         self.playerAnimation.setLoc((self.x, self.y))
-        if keyPressedTuple[pygame.K_LEFT or pygame.K_a] and (self.x > self.velocity):
+        if (keyPressedTuple[pygame.K_LEFT] or keyPressedTuple[pygame.K_a]) and (self.x > self.velocity):
             self.x -= self.velocity
+            #xMovement = self.velocity
             self.faceLeft = True
             self.idle = False
-        elif keyPressedTuple[pygame.K_RIGHT or pygame.K_d] and (self.x < self.maxX - self.velocity):
+        elif (keyPressedTuple[pygame.K_RIGHT] or keyPressedTuple[pygame.K_d]) and (self.x < self.maxX - self.velocity):
             self.x += self.velocity
+            #xMovement -= self.velocity
             self.faceRight = True
             self.idle = False
-        elif keyPressedTuple[pygame.K_UP or pygame.K_w] and (self.y > (self.windowHeight / 1.7) - self.velocity):
+        elif (keyPressedTuple[pygame.K_UP] or keyPressedTuple[pygame.K_w])\
+                and (self.y > (self.windowHeight / 1.7) - self.velocity):
             self.y -= self.velocity
-        elif keyPressedTuple[pygame.K_DOWN or pygame.K_s] and (self.y < self.maxY - self.velocity):
+        elif (keyPressedTuple[pygame.K_DOWN] or keyPressedTuple[pygame.K_s]) and (self.y < self.maxY - self.velocity):
             self.y += self.velocity
         else:
             self.idle = True

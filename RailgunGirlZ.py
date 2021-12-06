@@ -29,6 +29,7 @@ from socket import *
 from pygame.transform import scale
 
 from Player import *
+from Enemy import *
 
 ### 2 - Version, Screen, Clock, Sound Effects, and Music ###
 ## 2.1 - Version
@@ -37,7 +38,7 @@ VERSION = "0.1"
 ## 2- Constants
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
-WINDOW_WIDTH = 1920
+WINDOW_WIDTH = 960
 WINDOW_HEIGHT = 660
 FRAMES_PER_SECOND = 60
 
@@ -66,9 +67,11 @@ pygame.mixer.music.play(-1)
 ### 3 - Character Sprites / Images ###
 ## 3.1 - Background
 oBackground = pygame.image.load('resources/images/bgLee.jpg').convert()
+#oBackground = pygwidgets.Image(window, (0, 0), 'resources/images/bgLee.jpg') # -660, 0
 
 ## 3.2 - Mikoto Misaka Character Sprites
 oPlayer = Player(window, WINDOW_WIDTH, WINDOW_HEIGHT)
+enemyList = []
 
 ## 3.3 - Enemey AI Character Sprites
 # enemyAI_look_left = [pygame.image.load()]
@@ -97,12 +100,24 @@ while True:
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
+        # Button checks
+
+    for i in range(0, 5):
+        oEnemy = Enemy(window, WINDOW_WIDTH, WINDOW_HEIGHT)
+        enemyList.append(oEnemy)
+
+    for oEnemy in enemyList:
+        oEnemy.update()
 
     oPlayer.handleEvents()
 
     # Draw Screen Elements
     window.blit(oBackground, (0, 0))
     oPlayer.drawPlayer()
+    oEnemy.drawEnemy()
 
     # Update Display
     pygame.display.update()
+
+    # Slow things down a bit
+    game_clock.tick(60)
