@@ -14,8 +14,7 @@ class Player(object):
         self.windowWidth = windowWidth
         self.windowHeight = windowHeight
 
-        self.playerAnimation = pygwidgets.SpriteSheetAnimation(self.window, (0, 0),
-                                                               'resources/images/RailgunMisaka.png', 34, 80, 80, 1)
+        self.playerAnimation = pygwidgets.Image(window, (0, 0), 'resources/images/misaka_sprites/StandR-0.png')
 
         startingRect = self.playerAnimation.getRect()
         self.width = startingRect[2]
@@ -34,17 +33,17 @@ class Player(object):
         self.velocity = 5
 
     def handleEvents(self):
-        #xMovement = 0A
+        xMovement = 0
         keyPressedTuple = pygame.key.get_pressed()
         self.playerAnimation.setLoc((self.x, self.y))
         if (keyPressedTuple[pygame.K_LEFT] or keyPressedTuple[pygame.K_a]) and (self.x > self.velocity):
-            self.x -= self.velocity
-            #xMovement = self.velocity
+            #self.x -= self.velocity
+            xMovement += self.velocity
             self.faceLeft = True
             self.idle = False
         elif (keyPressedTuple[pygame.K_RIGHT] or keyPressedTuple[pygame.K_d]) and (self.x < self.maxX - self.velocity):
-            self.x += self.velocity
-            #xMovement -= self.velocity
+            #self.x += self.velocity
+            xMovement -= self.velocity
             self.faceRight = True
             self.idle = False
         elif (keyPressedTuple[pygame.K_UP] or keyPressedTuple[pygame.K_w])\

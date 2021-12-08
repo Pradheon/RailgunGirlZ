@@ -16,15 +16,13 @@ class Enemy(object):
         self.windowHeight = windowHeight
         self.player = player
 
-        self.enemyAnimation = pygwidgets.SpriteSheetAnimation(self.window, (0, 0),
-                                                              'resources/images/RailgunKuroko.png', 34, 80, 80, 1)
-        #pygwidgets.Image(window, (0, 0), 'resources/images/RailgunKuroko.png')
+        self.enemyAnimation = pygwidgets.Image(window, (0, 0), 'resources/images/kuroko_sprites/StandR-0.png')
 
         startingRect = self.enemyAnimation.getRect()
         self.width = startingRect[2]
         self.height = startingRect[3]
 
-        self.x = self.windowWidth / 2
+        self.x = (self.windowWidth / 2) + 250
         self.y = windowHeight - self.height - 20
         self.maxX = self.windowWidth - self.width
         self.maxY = self.windowHeight - self.height

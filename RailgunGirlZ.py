@@ -41,6 +41,7 @@ WHITE = (255, 255, 255)
 WINDOW_WIDTH = 960
 WINDOW_HEIGHT = 660
 FRAMES_PER_SECOND = 60
+N_ENEMIES = 5
 
 ## 2.2 - Screen
 pygame.init()
@@ -53,10 +54,16 @@ game_clock = pygame.time.Clock()
 ## 2.4 - Sound Effects and Music
 pygame.mixer.init()
 # 2.4.1 - Music
-main_menu_music = pygame.mixer.music.load('resources/sounds/shopsation.mp3')
-menu_music = pygame.mixer.music.load('resources/sounds/shopsation.mp3')
-background_music = pygame.mixer.music.load('resources/sounds/kontrolle.mp3')
-pygame.mixer.music.play(-1)
+background_music_k = pygame.mixer.Sound('resources/sounds/kontrolle.mp3')
+menu_music_s = pygame.mixer.Sound('resources/sounds/shopsation.mp3')
+pygame.mixer.set_num_channels(3)
+menu_music = pygame.mixer.Channel(0)
+background_music = pygame.mixer.Channel(1)
+background_music.play(background_music_k, loops=-1, fade_ms=5000)
+menu_music.play(menu_music_s, loops=-1, fade_ms=5000)
+menu_music.pause()
+pygame.mixer.Sound.set_volume(menu_music_s, 0.1)
+pygame.mixer.Sound.set_volume(background_music_k, 0.1)
 # 2.4.2 - Sound Effects
 # projectile_shoot_sound = pygame.mixer.Sound()
 # projectile_hit_sound = pygame.mixer.Sound()
@@ -102,7 +109,7 @@ while True:
             sys.exit()
         # Button checks
 
-    for i in range(0, 5):
+    for enemyNum in range(0, N_ENEMIES):
         oEnemy = Enemy(window, WINDOW_WIDTH, WINDOW_HEIGHT, oPlayer)
         enemyList.append(oEnemy)
 
@@ -114,7 +121,8 @@ while True:
     # Draw Screen Elements
     window.blit(oBackground, (0, 0))
     oPlayer.drawPlayer()
-    oEnemy.drawEnemy()
+    for oEnemy in enemyList:
+        oEnemy.drawEnemy()
 
     # Update Display
     pygame.display.update()
