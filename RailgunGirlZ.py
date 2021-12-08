@@ -103,7 +103,7 @@ while True:
         # Button checks
 
     for i in range(0, 5):
-        oEnemy = Enemy(window, WINDOW_WIDTH, WINDOW_HEIGHT)
+        oEnemy = Enemy(window, WINDOW_WIDTH, WINDOW_HEIGHT, oPlayer)
         enemyList.append(oEnemy)
 
     for oEnemy in enemyList:

@@ -10,10 +10,11 @@ import time
 
 class Enemy(object):
 
-    def __init__(self, window, windowWidth, windowHeight):
+    def __init__(self, window, windowWidth, windowHeight, player):
         self.window = window
         self.windowWidth = windowWidth
         self.windowHeight = windowHeight
+        self.player = player
 
         self.enemyAnimation = pygwidgets.SpriteSheetAnimation(self.window, (0, 0),
                                                               'resources/images/RailgunKuroko.png', 34, 80, 80, 1)
@@ -35,13 +36,15 @@ class Enemy(object):
 
         self.velocity = 1
 
-    def moveTowardsPlayer(self):
-        pass
-
     def update(self):
-        if (self.x < 0) or (self.x > self.maxX):
-            self.velocity = -self.velocity
-
+        if self.player.width > self.width:
+            self.width += self.velocity
+        if self.player.width < self.width:
+            self.width -= self.velocity
+        if self.player.height > self.height:
+            self.height += self.velocity
+        if self.player.height < self.height:
+            self.height -= self.velocity
 
     def getRect(self):
         enemyRect = pygame.Rect(self.x, self.y, self.width, self.height)
