@@ -18,10 +18,10 @@ v0.03
 ![Game Screen](/resources/images/screenshots/gameScreen.jpg?raw=true "Game Screen")
 
 # How to Play
-- Up Arrow / W Key: Move player upward
-- Down Arrow / S Key: Move player downward
-- Left Arrow / A Key: Move player to the left
-- Right Arrow / D Key: Move player to the right
+- Up / W Key: Move player upward
+- Down / S Key: Move player downward
+- Left / A Key: Move player to the left
+- Right / D Key: Move player to the right
 
 ## Built With
 - Kotlin
