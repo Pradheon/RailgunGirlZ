@@ -24,8 +24,9 @@ v0.03
 - Right / D Key: Move player to the right
 
 ## Built With
-- Kotlin
-- GraphQL
+- Python
+- Pygame
+- Pygwidgets
 
 ## Future Updates
 - [ ] More characters
