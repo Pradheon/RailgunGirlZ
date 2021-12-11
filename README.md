@@ -14,6 +14,7 @@ v0.03
 - [Pygwidgets](<https://pypi.org/project/pygwidgets/> "Pygwidgets")
 
 ## Screenshots
+### Game Screen
 ![Game Screen](/resources/images/screenshots/gameScreen.jpg?raw=true "Game Screen")
 
 # How to Play
