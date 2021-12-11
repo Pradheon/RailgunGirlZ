@@ -30,6 +30,7 @@ from pygame.transform import scale
 
 from Player import *
 from Enemy import *
+from Background import *
 
 ### 2 - Version, Screen, Clock, Sound Effects, and Music ###
 ## 2.1 - Version
@@ -38,7 +39,7 @@ VERSION = "0.1"
 ## 2- Constants
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
-WINDOW_WIDTH = 960
+WINDOW_WIDTH = 1100 #960
 WINDOW_HEIGHT = 660
 FRAMES_PER_SECOND = 60
 N_ENEMIES = 5
@@ -73,7 +74,7 @@ pygame.mixer.Sound.set_volume(background_music_k, 0.1)
 
 ### 3 - Character Sprites / Images ###
 ## 3.1 - Background
-oBackground = pygame.image.load('resources/images/bgLee.jpg').convert()
+oBackground = Background(window, WINDOW_WIDTH, WINDOW_HEIGHT)
 #oBackground = pygwidgets.Image(window, (0, 0), 'resources/images/bgLee.jpg') # -660, 0
 
 ## 3.2 - Mikoto Misaka Character Sprites
@@ -99,6 +100,9 @@ enemyList = []
 ### Game Object Classes ###
 ## Main Menu Object
 
+for enemyNum in range(0, N_ENEMIES):
+    oEnemy = Enemy(window, WINDOW_WIDTH, WINDOW_HEIGHT)
+    enemyList.append(oEnemy)
 
 ### Main Program ###
 while True:
@@ -109,20 +113,24 @@ while True:
             sys.exit()
         # Button checks
 
-    for enemyNum in range(0, N_ENEMIES):
-        oEnemy = Enemy(window, WINDOW_WIDTH, WINDOW_HEIGHT, oPlayer)
-        enemyList.append(oEnemy)
+    keyPressedTuple = pygame.key.get_pressed()
+    playerMovementX = oPlayer.handleMovement(keyPressedTuple)
+
+    if (keyPressedTuple[pygame.K_LEFT] or keyPressedTuple[pygame.K_a]):
+        oBackground.update('left')
+    if (keyPressedTuple[pygame.K_RIGHT] or keyPressedTuple[pygame.K_d]):
+        oBackground.update('right')
+
+    playerRect = oPlayer.getRect()
 
     for oEnemy in enemyList:
-        oEnemy.update()
-
-    oPlayer.handleEvents()
+        oEnemy.update(playerRect)
 
     # Draw Screen Elements
-    window.blit(oBackground, (0, 0))
-    oPlayer.drawPlayer()
+    oBackground.draw()
+    oPlayer.draw()
     for oEnemy in enemyList:
-        oEnemy.drawEnemy()
+        oEnemy.draw()
 
     # Update Display
     pygame.display.update()
