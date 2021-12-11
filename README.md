@@ -14,7 +14,7 @@ v0.03
 - [Pygwidgets](<https://pypi.org/project/pygwidgets/> "Pygwidgets")
 
 ## Screenshots
-![Game Screen](C:\Users\pradh\Railgun GirlZ\resources\images\screenshots\gameScreen.jpg)
+![Game Screen](/resources/images/screenshots/gameScreen.jpg?raw=true "Game Screen")
 
 # How to Play
 - Up Arrow / W Key: Move player upward
