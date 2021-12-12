@@ -31,6 +31,8 @@ from pygame.transform import scale
 from Player import *
 from Enemy import *
 from Background import *
+from Projectile import *
+from Buttons import *
 
 ### 2 - Version, Screen, Clock, Sound Effects, and Music ###
 ## 2.1 - Version
@@ -79,7 +81,11 @@ oBackground = Background(window, WINDOW_WIDTH, WINDOW_HEIGHT)
 
 ## 3.2 - Mikoto Misaka Character Sprites
 oPlayer = Player(window, WINDOW_WIDTH, WINDOW_HEIGHT)
+#oProjectile = Projectile(window, WINDOW_WIDTH, WINDOW_HEIGHT, )
 enemyList = []
+oShootButton = pygwidgets.TextButton(window, (890, 590), 'Shoot')
+oMeleeButton = pygwidgets.TextButton(window, (890, 530), 'Melee')
+
 
 ## 3.3 - Enemey AI Character Sprites
 # enemyAI_look_left = [pygame.image.load()]
@@ -112,6 +118,9 @@ while True:
             pygame.quit()
             sys.exit()
         # Button checks
+        if oMeleeButton.handleEvent(event):
+            if enemyPlayerCollide:
+                oEnemy.hit()
 
     keyPressedTuple = pygame.key.get_pressed()
     playerMovementX = oPlayer.handleMovement(keyPressedTuple)
@@ -122,15 +131,23 @@ while True:
         oBackground.update('right')
 
     playerRect = oPlayer.getRect()
+    enemyRect = oEnemy.getRect()
+    enemyPlayerCollide = pygame.Rect.colliderect(playerRect, enemyRect)
 
     for oEnemy in enemyList:
         oEnemy.update(playerRect)
+        if enemyPlayerCollide:
+            oPlayer.hit()
+        if keyPressedTuple[pygame.K_k] and enemyPlayerCollide:
+            oEnemy.hit()
 
     # Draw Screen Elements
     oBackground.draw()
     oPlayer.draw()
     for oEnemy in enemyList:
         oEnemy.draw()
+    oShootButton.draw()
+    oMeleeButton.draw()
 
     # Update Display
     pygame.display.update()

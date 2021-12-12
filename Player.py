@@ -60,6 +60,7 @@ class Player(object):
 
         self.direction = RIGHT
         self.isMoving = False
+        self.keysDownList = []
 
         self.health = 100
         self.visible = True
@@ -75,42 +76,38 @@ class Player(object):
         if (keyPressedTuple[pygame.K_LEFT] or keyPressedTuple[pygame.K_a]) and (self.x > self.velocity):
             self.x -= 2
             xMovement += self.velocity
-            '''
             self.keysDownList.append(LEFT)
             self.direction = LEFT
             self.oPlayerAnimation.replace(LEFT)
             self.oPlayerAnimation.start()
             self.isMoving = True
             #self.faceLeft = True
-            #self.idle = False'''
+            #self.idle = False
         elif (keyPressedTuple[pygame.K_RIGHT] or keyPressedTuple[pygame.K_d]) and (self.x < self.maxX - self.velocity):
             self.x += 2
             xMovement -= self.velocity
-            '''
             self.keysDownList.append(RIGHT)
             self.direction = RIGHT
             self.oPlayerAnimation.replace(RIGHT)
             self.oPlayerAnimation.start()
             self.isMoving = True
             #self.faceRight = True
-            #self.idle = False'''
+            #self.idle = False
         if (keyPressedTuple[pygame.K_UP] or keyPressedTuple[pygame.K_w]) \
                 and (self.y > (self.windowHeight / 1.7) - self.velocity):
             self.y -= self.velocity
-            '''
             self.keysDownList.append(RIGHT)
             self.direction = RIGHT
             self.oPlayerAnimation.replace(RIGHT)
             self.oPlayerAnimation.start()
-            self.isMoving = True'''
+            self.isMoving = True
         elif (keyPressedTuple[pygame.K_DOWN] or keyPressedTuple[pygame.K_s]) and (self.y < self.maxY - self.velocity):
             self.y += self.velocity
-            '''
             self.keysDownList.append(RIGHT)
             self.direction = RIGHT
             self.oPlayerAnimation.replace(RIGHT)
             self.oPlayerAnimation.start()
-            self.isMoving = True'''
+            self.isMoving = True
         else:
             pass
         return xMovement
@@ -119,19 +116,30 @@ class Player(object):
         playerRect = pygame.Rect(self.x, self.y, self.width, self.height)
         return playerRect
 
+    def getCenterRect(self):
+        theRect = self.getRect()
+        centerRect = theRect.center
+        return centerRect
+
+    def getDirection(self):
+        return self.direction
+
+    def drawHealthbar(self):
+        self.healthText.draw()
+        pygame.draw.rect(self.window, RED, (40, 30, 350, 20), 0)
+        pygame.draw.rect(self.window, GREEN, (40, 30, 350 - (5 * (100 - self.health)), 20), 0)
+        pygame.draw.rect(self.window, BLACK, (40, 30, 350, 20), 1)
+
     # draw the player on the game screen
     def draw(self):
         if self.visible:
-            self.healthText.draw()
-            pygame.draw.rect(self.window, RED, (40, 30, 350, 20), 0)
-            pygame.draw.rect(self.window, GREEN, (40, 30, 350 - (5 * (100 - self.health)), 20), 0)
-            pygame.draw.rect(self.window, BLACK, (40, 30, 350, 20), 1)
+            self.drawHealthbar()
             self.playerAnimation.draw()
 
     # player takes damage from enemy AI
     def hit(self):
         if self.health > 0:
-            self.health -= 1
+            self.health -= .01
             print('hit')
         else:
             self.visible = False

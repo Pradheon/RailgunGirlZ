@@ -61,6 +61,11 @@ class Enemy(object):
         enemyRect = pygame.Rect(self.x, self.y, self.width, self.height)
         return enemyRect
 
+    def getCenterRect(self):
+        theRect = self.getRect()
+        centerRect = theRect.center
+        return centerRect
+
     # draw the player on the game screen
     def draw(self):
         if self.visible:
