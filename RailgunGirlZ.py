@@ -32,7 +32,7 @@ from Player import *
 from Enemy import *
 from Background import *
 from Projectile import *
-from Buttons import *
+from Constants import *
 
 ### 2 - Version, Screen, Clock, Sound Effects, and Music ###
 ## 2.1 - Version
@@ -81,11 +81,10 @@ oBackground = Background(window, WINDOW_WIDTH, WINDOW_HEIGHT)
 
 ## 3.2 - Mikoto Misaka Character Sprites
 oPlayer = Player(window, WINDOW_WIDTH, WINDOW_HEIGHT)
-#oProjectile = Projectile(window, WINDOW_WIDTH, WINDOW_HEIGHT, )
+oProjectileMgr = ProjectileMgr(window, WINDOW_WIDTH, WINDOW_HEIGHT)
 enemyList = []
 oShootButton = pygwidgets.TextButton(window, (890, 590), 'Shoot')
 oMeleeButton = pygwidgets.TextButton(window, (890, 530), 'Melee')
-
 
 ## 3.3 - Enemey AI Character Sprites
 # enemyAI_look_left = [pygame.image.load()]
@@ -117,13 +116,26 @@ while True:
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
+
+        # Player movement checks
+        elif event.type == pygame.KEYDOWN:
+            oPlayer.handleMovement(event)
+        elif event.type == pygame.KEYUP:
+            oPlayer.handleMovement(event)
+
         # Button checks
         if oMeleeButton.handleEvent(event):
             if enemyPlayerCollide:
                 oEnemy.hit()
 
+        if oShootButton.handleEvent(event):
+            center = oPlayer.getCenterRect()
+            direction = oPlayer.getDirection()
+            oProjectileMgr.newProjectile(center, direction)
+
+
     keyPressedTuple = pygame.key.get_pressed()
-    playerMovementX = oPlayer.handleMovement(keyPressedTuple)
+    #playerMovementX = oPlayer.handleMovement(event)
 
     if (keyPressedTuple[pygame.K_LEFT] or keyPressedTuple[pygame.K_a]):
         oBackground.update('left')
@@ -132,7 +144,7 @@ while True:
 
     playerRect = oPlayer.getRect()
     enemyRect = oEnemy.getRect()
-    enemyPlayerCollide = pygame.Rect.colliderect(playerRect, enemyRect)
+    enemyPlayerCollide = enemyRect.colliderect(playerRect)
 
     for oEnemy in enemyList:
         oEnemy.update(playerRect)
@@ -141,6 +153,9 @@ while True:
         if keyPressedTuple[pygame.K_k] and enemyPlayerCollide:
             oEnemy.hit()
 
+    oProjectileMgr.update()
+    oPlayer.update()
+
     # Draw Screen Elements
     oBackground.draw()
     oPlayer.draw()
@@ -148,6 +163,7 @@ while True:
         oEnemy.draw()
     oShootButton.draw()
     oMeleeButton.draw()
+    oProjectileMgr.draw()
 
     # Update Display
     pygame.display.update()

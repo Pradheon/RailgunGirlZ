@@ -6,6 +6,8 @@ import pygwidgets
 from pygame.locals import *
 from Player import *
 import time
+from Constants import *
+from Constants import *
 
 
 class Enemy(object):

@@ -6,14 +6,7 @@ import pygwidgets
 from pygame.locals import *
 import time
 from AnimationCollection import *
-
-IDLE = 'idle'
-RIGHT = 'right'
-LEFT = 'left'
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLACK = (0, 0, 0)
-
+from Constants import *
 
 class Player(object):
 
@@ -32,7 +25,19 @@ class Player(object):
                          ('resources/images/misaka_sprites/RunR-3.png', .1),
                          ('resources/images/misaka_sprites/RunR-4.png', .1),
                          ('resources/images/misaka_sprites/RunR-5.png', .1))
+        runUpTuple = (('resources/images/misaka_sprites/RunR-0.png', .1),
+                         ('resources/images/misaka_sprites/RunR-1.png', .1),
+                         ('resources/images/misaka_sprites/RunR-2.png', .1),
+                         ('resources/images/misaka_sprites/RunR-3.png', .1),
+                         ('resources/images/misaka_sprites/RunR-4.png', .1),
+                         ('resources/images/misaka_sprites/RunR-5.png', .1))
         runLeftTuple = (('resources/images/misaka_sprites/RunL-0.png', .1),
+                        ('resources/images/misaka_sprites/RunL-1.png', .1),
+                        ('resources/images/misaka_sprites/RunL-2.png', .1),
+                        ('resources/images/misaka_sprites/RunL-3.png', .1),
+                        ('resources/images/misaka_sprites/RunL-4.png', .1),
+                        ('resources/images/misaka_sprites/RunL-5.png', .1))
+        runDownTuple = (('resources/images/misaka_sprites/RunL-0.png', .1),
                         ('resources/images/misaka_sprites/RunL-1.png', .1),
                         ('resources/images/misaka_sprites/RunL-2.png', .1),
                         ('resources/images/misaka_sprites/RunL-3.png', .1),
@@ -55,10 +60,13 @@ class Player(object):
         self.oPlayerAnimation = AnimationCollection(window, (self.x, self.y),
                                                     {IDLE: idleTuple,
                                                      RIGHT: runRightTuple,
-                                                     LEFT: runLeftTuple},
-                                                    RIGHT, loop=True, autoStart=False)
+                                                     LEFT: runLeftTuple,
+                                                     UP: runUpTuple,
+                                                     DOWN: runDownTuple},
+                                                    IDLE, loop=True, autoStart=True)
+        '''UP: runUpTuple,DOWN: runDownTuple'''
 
-        self.direction = RIGHT
+        self.direction = IDLE
         self.isMoving = False
         self.keysDownList = []
 
@@ -70,47 +78,85 @@ class Player(object):
 
         self.velocity = 5
 
-    def handleMovement(self, keyPressedTuple):
+    def handleMovement(self, event):
         xMovement = 0
         self.playerAnimation.setLoc((self.x, self.y))
-        if (keyPressedTuple[pygame.K_LEFT] or keyPressedTuple[pygame.K_a]) and (self.x > self.velocity):
-            self.x -= 2
-            xMovement += self.velocity
-            self.keysDownList.append(LEFT)
-            self.direction = LEFT
-            self.oPlayerAnimation.replace(LEFT)
-            self.oPlayerAnimation.start()
-            self.isMoving = True
-            #self.faceLeft = True
-            #self.idle = False
-        elif (keyPressedTuple[pygame.K_RIGHT] or keyPressedTuple[pygame.K_d]) and (self.x < self.maxX - self.velocity):
-            self.x += 2
-            xMovement -= self.velocity
-            self.keysDownList.append(RIGHT)
-            self.direction = RIGHT
-            self.oPlayerAnimation.replace(RIGHT)
-            self.oPlayerAnimation.start()
-            self.isMoving = True
-            #self.faceRight = True
-            #self.idle = False
-        if (keyPressedTuple[pygame.K_UP] or keyPressedTuple[pygame.K_w]) \
-                and (self.y > (self.windowHeight / 1.7) - self.velocity):
-            self.y -= self.velocity
-            self.keysDownList.append(RIGHT)
-            self.direction = RIGHT
-            self.oPlayerAnimation.replace(RIGHT)
-            self.oPlayerAnimation.start()
-            self.isMoving = True
-        elif (keyPressedTuple[pygame.K_DOWN] or keyPressedTuple[pygame.K_s]) and (self.y < self.maxY - self.velocity):
-            self.y += self.velocity
-            self.keysDownList.append(RIGHT)
-            self.direction = RIGHT
-            self.oPlayerAnimation.replace(RIGHT)
-            self.oPlayerAnimation.start()
-            self.isMoving = True
-        else:
-            pass
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_a and (self.x > self.velocity):
+                self.x -= 2
+                xMovement += self.velocity
+                self.keysDownList.append(LEFT)
+                self.direction = LEFT
+                self.oPlayerAnimation.replace(LEFT)
+                self.oPlayerAnimation.start()
+                self.isMoving = True
+                #self.faceLeft = True
+                #self.idle = False
+                print(self.x)
+            elif event.key == pygame.K_RIGHT or event.key == pygame.K_d and (self.x < self.maxX - self.velocity):
+                self.x += 2
+                xMovement -= self.velocity
+                self.keysDownList.append(RIGHT)
+                self.direction = RIGHT
+                self.oPlayerAnimation.replace(RIGHT)
+                self.oPlayerAnimation.start()
+                self.isMoving = True
+                #self.faceRight = True
+                #self.idle = False
+                print(self.x)
+            if event.key == pygame.K_UP or event.key == pygame.K_w \
+                    and (self.y > (self.windowHeight / 1.7) - self.velocity):
+                self.y -= self.velocity
+                self.keysDownList.append(UP)
+                self.direction = UP
+                self.oPlayerAnimation.replace(UP)
+                self.oPlayerAnimation.start()
+                self.isMoving = True
+            elif event.key == pygame.K_DOWN or event.key == pygame.K_s and (self.y < self.maxY - self.velocity):
+                self.y += self.velocity
+                self.keysDownList.append(DOWN)
+                self.direction = DOWN
+                self.oPlayerAnimation.replace(DOWN)
+                self.oPlayerAnimation.start()
+                self.isMoving = True
+
+        elif event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                self.keysDownList.remove(LEFT)
+            elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                self.keysDownList.remove(RIGHT)
+            elif event.key == pygame.K_UP or event.key == pygame.K_w:
+                self.keysDownList.remove(UP)
+            elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                self.keysDownList.remove(DOWN)
+
+            if len(self.keysDownList) == 0:
+                self.keysDownList.append(IDLE)
+                self.direction = IDLE
+                self.oPlayerAnimation.replace(IDLE)
+                self.oPlayerAnimation.start()
+                self.isMoving = False
+            else:
+                self.direction = self.keysDownList[0]
+                self.oPlayerAnimation.replace(self.direction)
+                self.oPlayerAnimation.start()
+                self.isMoving = True
+
         return xMovement
+
+    def update(self):
+        '''if self.isMoving:
+            if self.direction == LEFT:
+                self.x -= self.velocity % self.windowWidth
+            elif self.direction == RIGHT:
+                self.x += self.velocity % self.windowWidth
+            if self.direction == UP:
+                self.y -= self.velocity % self.windowWidth
+            elif self.direction == DOWN:
+                self.y += self.velocity % self.windowWidth'''
+        self.oPlayerAnimation.update()
+        '''return self.x, self.y'''
 
     def getRect(self):
         playerRect = pygame.Rect(self.x, self.y, self.width, self.height)
@@ -134,12 +180,12 @@ class Player(object):
     def draw(self):
         if self.visible:
             self.drawHealthbar()
-            self.playerAnimation.draw()
+            self.oPlayerAnimation.draw()
 
     # player takes damage from enemy AI
     def hit(self):
         if self.health > 0:
             self.health -= .01
-            print('hit')
+            #print('hit')
         else:
             self.visible = False

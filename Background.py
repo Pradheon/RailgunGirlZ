@@ -7,6 +7,7 @@ import pygwidgets
 from pygame.locals import *
 import time
 from Player import *
+from Constants import *
 
 
 class Background():
