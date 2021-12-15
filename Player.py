@@ -72,91 +72,82 @@ class Player(object):
 
         self.health = 100
         self.visible = True
+        self.facing = RIGHT
         '''self.faceLeft = False
         self.faceRight = False
         self.idle = True'''
 
         self.velocity = 5
 
-    def handleMovement(self, event):
-        xMovement = 0
-        self.playerAnimation.setLoc((self.x, self.y))
-
+    def handleEvent(self, event):
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT or event.key == pygame.K_a and (self.x > self.velocity):
-                self.x -= 2
-                xMovement += self.velocity
+            if (event.key == pygame.K_LEFT) or (event.key == pygame.K_a):
                 self.keysDownList.append(LEFT)
-                self.direction = LEFT
-                self.oPlayerAnimation.replace(LEFT)
-                self.oPlayerAnimation.start()
-                self.isMoving = True
-                #self.faceLeft = True
-                #self.idle = False
-                print(self.x)
-            elif event.key == pygame.K_RIGHT or event.key == pygame.K_d and (self.x < self.maxX - self.velocity):
-                self.x += 2
-                xMovement -= self.velocity
+                self.facing = LEFT
+            elif (event.key == pygame.K_RIGHT) or (event.key == pygame.K_d):
                 self.keysDownList.append(RIGHT)
-                self.direction = RIGHT
-                self.oPlayerAnimation.replace(RIGHT)
-                self.oPlayerAnimation.start()
-                self.isMoving = True
-                #self.faceRight = True
-                #self.idle = False
-                print(self.x)
-            if event.key == pygame.K_UP or event.key == pygame.K_w \
-                    and (self.y > (self.windowHeight / 1.7) - self.velocity):
-                self.y -= self.velocity
+                self.facing = RIGHT
+            elif (event.key == pygame.K_UP) or (event.key == pygame.K_w):
                 self.keysDownList.append(UP)
-                self.direction = UP
-                self.oPlayerAnimation.replace(UP)
-                self.oPlayerAnimation.start()
-                self.isMoving = True
-            elif event.key == pygame.K_DOWN or event.key == pygame.K_s and (self.y < self.maxY - self.velocity):
-                self.y += self.velocity
+            elif (event.key == pygame.K_DOWN) or (event.key == pygame.K_s):
                 self.keysDownList.append(DOWN)
-                self.direction = DOWN
-                self.oPlayerAnimation.replace(DOWN)
-                self.oPlayerAnimation.start()
-                self.isMoving = True
 
-        elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+        if event.type == pygame.KEYUP:
+            if (event.key == pygame.K_LEFT) or (event.key == pygame.K_a):
                 self.keysDownList.remove(LEFT)
-            elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+            elif (event.key == pygame.K_RIGHT) or (event.key == pygame.K_d):
                 self.keysDownList.remove(RIGHT)
-            elif event.key == pygame.K_UP or event.key == pygame.K_w:
+            elif (event.key == pygame.K_UP) or (event.key == pygame.K_w):
                 self.keysDownList.remove(UP)
-            elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
+            elif (event.key == pygame.K_DOWN) or (event.key == pygame.K_s):
                 self.keysDownList.remove(DOWN)
 
-            if len(self.keysDownList) == 0:
-                self.keysDownList.append(IDLE)
-                self.direction = IDLE
-                self.oPlayerAnimation.replace(IDLE)
-                self.oPlayerAnimation.start()
-                self.isMoving = False
-            else:
-                self.direction = self.keysDownList[0]
-                self.oPlayerAnimation.replace(self.direction)
-                self.oPlayerAnimation.start()
-                self.isMoving = True
-
-        return xMovement
-
     def update(self):
-        '''if self.isMoving:
-            if self.direction == LEFT:
-                self.x -= self.velocity % self.windowWidth
-            elif self.direction == RIGHT:
-                self.x += self.velocity % self.windowWidth
-            if self.direction == UP:
-                self.y -= self.velocity % self.windowWidth
-            elif self.direction == DOWN:
-                self.y += self.velocity % self.windowWidth'''
+        if (LEFT in self.keysDownList) and (self.x > self.velocity):
+            self.x -= 2
+            self.direction = LEFT
+            self.oPlayerAnimation.replace(LEFT)
+            self.oPlayerAnimation.start()
+            self.isMoving = True
+            # self.faceLeft = True
+            # self.idle = False
+            # print(self.x)
+        elif (RIGHT in self.keysDownList) and (self.x < self.maxX - self.velocity):
+            self.x += 2
+            self.direction = RIGHT
+            self.oPlayerAnimation.replace(RIGHT)
+            self.oPlayerAnimation.start()
+            self.isMoving = True
+            # self.faceRight = True
+            # self.idle = False
+            # print(self.x)
+        if (UP in self.keysDownList) and (self.y > (self.windowHeight / 1.7) - self.velocity):
+            self.y -= self.velocity
+            self.direction = UP
+            self.oPlayerAnimation.replace(UP)
+            self.oPlayerAnimation.start()
+            self.isMoving = True
+        if (DOWN in self.keysDownList) and (self.y < self.maxY - self.velocity):
+            self.y += self.velocity
+            self.direction = DOWN
+            self.oPlayerAnimation.replace(DOWN)
+            self.oPlayerAnimation.start()
+            self.isMoving = True
+
+        # print('keysDownList:', self.keysDownList)
+        if len(self.keysDownList) == 0:
+            self.direction = IDLE
+            self.oPlayerAnimation.replace(IDLE)
+            self.oPlayerAnimation.start()
+            self.isMoving = False
+        else:
+            self.direction = self.keysDownList[0]
+            self.oPlayerAnimation.replace(self.direction)
+            self.oPlayerAnimation.start()
+            self.isMoving = True
+
         self.oPlayerAnimation.update()
-        '''return self.x, self.y'''
+        self.oPlayerAnimation.setLoc((self.x, self.y))
 
     def getRect(self):
         playerRect = pygame.Rect(self.x, self.y, self.width, self.height)
@@ -170,10 +161,17 @@ class Player(object):
     def getDirection(self):
         return self.direction
 
+    def getFacing(self):
+        return self.facing
+
+    def getHitboxRect(self):
+        hitboxRect = pygame.Rect(self.x + 22, self.y + 10, self.width - 45, self.height - 10)
+        return hitboxRect
+
     def drawHealthbar(self):
         self.healthText.draw()
         pygame.draw.rect(self.window, RED, (40, 30, 350, 20), 0)
-        pygame.draw.rect(self.window, GREEN, (40, 30, 350 - (5 * (100 - self.health)), 20), 0)
+        pygame.draw.rect(self.window, GREEN, (40, 30, 350 - (1 * (100 - self.health)), 20), 0)
         pygame.draw.rect(self.window, BLACK, (40, 30, 350, 20), 1)
 
     # draw the player on the game screen

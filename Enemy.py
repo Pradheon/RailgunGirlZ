@@ -7,7 +7,6 @@ from pygame.locals import *
 from Player import *
 import time
 from Constants import *
-from Constants import *
 
 
 class Enemy(object):
@@ -68,18 +67,32 @@ class Enemy(object):
         centerRect = theRect.center
         return centerRect
 
+    def getHitboxRect(self):
+        hitboxRect = pygame.Rect(self.x + 22, self.y + 5, self.width - 45, self.height - 5)
+        return hitboxRect
+
     # draw the player on the game screen
     def draw(self):
         if self.visible:
             pygame.draw.rect(self.window, RED, (self.x, self.y - 20, 80, 10), 0)
-            pygame.draw.rect(self.window, GREEN, (self.x, self.y - 20, 80 - (5 * (100 - self.health)), 10), 0)
+            pygame.draw.rect(self.window, GREEN, (self.x, self.y - 20, 80 - (1 * (100 - self.health)), 10), 0)
             pygame.draw.rect(self.window, BLACK, (self.x, self.y - 20, 80, 10), 1)
             self.enemyAnimation.draw()
 
-    # player takes damage from enemy AI
-    def hit(self):
+    # enemy takes shoot damage from player
+    def shootHit(self):
         if self.health > 0:
-            self.health -= 1
-            print('hit')
+            self.health -= 5
+            # print('hit')
         else:
             self.visible = False
+
+    def meleeHit(self):
+        if self.health > 0:
+            self.health -= 10
+            # print('hit')
+        else:
+            self.visible = False
+
+    def getHealth(self):
+        return self.health

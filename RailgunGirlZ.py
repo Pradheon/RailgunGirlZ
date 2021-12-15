@@ -14,37 +14,17 @@
 ##############################################################################################################################################################
 
 ### 1 - Load Modules ###
-import pygame
-import pygwidgets
-import random
-import sys
-import os
-import math
-import getopt
-import json
-from pygame.locals import *
-from pygame.sprite import *
-from socket import *
 
-from pygame.transform import scale
-
-from Player import *
-from Enemy import *
 from Background import *
-from Projectile import *
 from Constants import *
+from Enemy import *
+from Projectile import *
 
 ### 2 - Version, Screen, Clock, Sound Effects, and Music ###
 ## 2.1 - Version
 VERSION = "0.1"
 
 ## 2- Constants
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-WINDOW_WIDTH = 1100 #960
-WINDOW_HEIGHT = 660
-FRAMES_PER_SECOND = 60
-N_ENEMIES = 5
 
 ## 2.2 - Screen
 pygame.init()
@@ -79,18 +59,12 @@ pygame.mixer.Sound.set_volume(background_music_k, 0.1)
 oBackground = Background(window, WINDOW_WIDTH, WINDOW_HEIGHT)
 #oBackground = pygwidgets.Image(window, (0, 0), 'resources/images/bgLee.jpg') # -660, 0
 
-## 3.2 - Mikoto Misaka Character Sprites
+## 3.2 - Object Instantiation
 oPlayer = Player(window, WINDOW_WIDTH, WINDOW_HEIGHT)
 oProjectileMgr = ProjectileMgr(window, WINDOW_WIDTH, WINDOW_HEIGHT)
 enemyList = []
 oShootButton = pygwidgets.TextButton(window, (890, 590), 'Shoot')
 oMeleeButton = pygwidgets.TextButton(window, (890, 530), 'Melee')
-
-## 3.3 - Enemey AI Character Sprites
-# enemyAI_look_left = [pygame.image.load()]
-# enemyAI_look_right = [pygame.image.load()]
-# enemyAI_run_left = [pygame.image.load()]
-# enemyAI_run_right = [pygame.image.load()]
 
 
 ### 4 - Resource Handling Functions ###
@@ -125,8 +99,9 @@ while True:
 
         # Button checks
         if oMeleeButton.handleEvent(event):
-            if enemyPlayerCollide:
-                oEnemy.hit()
+            if oEnemy.visible:
+                if enemyPlayerCollide:
+                    oEnemy.hit()
 
         if oShootButton.handleEvent(event):
             center = oPlayer.getCenterRect()
@@ -137,9 +112,9 @@ while True:
     keyPressedTuple = pygame.key.get_pressed()
     #playerMovementX = oPlayer.handleMovement(event)
 
-    if (keyPressedTuple[pygame.K_LEFT] or keyPressedTuple[pygame.K_a]):
+    if keyPressedTuple[pygame.K_LEFT] or keyPressedTuple[pygame.K_a]:
         oBackground.update('left')
-    if (keyPressedTuple[pygame.K_RIGHT] or keyPressedTuple[pygame.K_d]):
+    if keyPressedTuple[pygame.K_RIGHT] or keyPressedTuple[pygame.K_d]:
         oBackground.update('right')
 
     playerRect = oPlayer.getRect()
@@ -148,10 +123,18 @@ while True:
 
     for oEnemy in enemyList:
         oEnemy.update(playerRect)
-        if enemyPlayerCollide:
-            oPlayer.hit()
-        if keyPressedTuple[pygame.K_k] and enemyPlayerCollide:
-            oEnemy.hit()
+        if oEnemy.visible:
+            for oProjectile in reversed(oProjectileMgr.projectileList):
+                projectileX = oProjectile.update()
+                projectilePos = (projectileX, oProjectile.y)
+                enemyProjectileCollide = enemyRect.collidepoint(projectilePos)
+                if keyPressedTuple[pygame.K_j] or enemyProjectileCollide:
+                    oEnemy.shootHit()
+                    oProjectileMgr.removeProjectile()
+            if enemyPlayerCollide:
+                oPlayer.hit()
+            if keyPressedTuple[pygame.K_k] and enemyPlayerCollide:
+                oEnemy.meleeHit()
 
     oProjectileMgr.update()
     oPlayer.update()

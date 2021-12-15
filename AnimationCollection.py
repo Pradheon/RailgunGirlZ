@@ -67,3 +67,6 @@ class AnimationCollection():
 
     def draw(self, scrollOffsetX=0, scrollOffsetY=0):
         self.oCurrentAnimation.draw(scrollOffsetX, scrollOffsetY)
+
+    def setLoc(self, locTuple):
+        self.oCurrentAnimation.setLoc(locTuple)

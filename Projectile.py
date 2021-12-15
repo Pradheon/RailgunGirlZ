@@ -42,6 +42,10 @@ class ProjectileMgr():
             if projectileX < 0 or projectileX > self.windowWidth:
                 self.projectileList.remove(oProjectile)
 
+    def removeProjectile(self):
+        for oProjectile in reversed(self.projectileList):
+            self.projectileList.remove(oProjectile)
+
     def newProjectile(self, loc, direction):
         oProjectile = Projectile(self.window, self.windowWidth, self.windowHeight, loc[0], loc[1], direction)
         self.projectileList.append(oProjectile)
