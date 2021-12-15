@@ -74,9 +74,9 @@ class Enemy(object):
     # draw the player on the game screen
     def draw(self):
         if self.visible:
-            pygame.draw.rect(self.window, RED, (self.x, self.y - 20, 80, 10), 0)
-            pygame.draw.rect(self.window, GREEN, (self.x, self.y - 20, 80 - (1 * (100 - self.health)), 10), 0)
-            pygame.draw.rect(self.window, BLACK, (self.x, self.y - 20, 80, 10), 1)
+            pygame.draw.rect(self.window, RED, (self.x - 15, self.y - 20, 100, 10), 0)
+            pygame.draw.rect(self.window, GREEN, (self.x - 15, self.y - 20, 100 - (1 * (100 - self.health)), 10), 0)
+            pygame.draw.rect(self.window, BLACK, (self.x - 15, self.y - 20, 100, 10), 1)
             self.enemyAnimation.draw()
 
     # enemy takes shoot damage from player

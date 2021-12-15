@@ -93,9 +93,9 @@ while True:
 
         # Player movement checks
         elif event.type == pygame.KEYDOWN:
-            oPlayer.handleMovement(event)
+            oPlayer.handleEvent(event)
         elif event.type == pygame.KEYUP:
-            oPlayer.handleMovement(event)
+            oPlayer.handleEvent(event)
 
         # Button checks
         if oMeleeButton.handleEvent(event):
@@ -105,7 +105,7 @@ while True:
 
         if oShootButton.handleEvent(event):
             center = oPlayer.getCenterRect()
-            direction = oPlayer.getDirection()
+            direction = oPlayer.getFacing()
             oProjectileMgr.newProjectile(center, direction)
 
 
