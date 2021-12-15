@@ -7,7 +7,7 @@ Play as Mikoto Misaka as you fight your way through Academy City's toughest foes
 Inspired by Gun GirlZ. Based on "A Certian Scientific Railgun" series by Kazuma Kamachi and Motoi Fuyukawa.
 
 ### Version
-v0.03
+v0.10
 
 ## Links
 - [Pygame](<https://www.pygame.org/news> "Pygame")
