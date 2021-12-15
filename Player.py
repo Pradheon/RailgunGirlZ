@@ -18,7 +18,7 @@ class Player(object):
         idleTuple = (('resources/images/misaka_sprites/StandR-0.png', .1),
                      ('resources/images/misaka_sprites/StandR-1.png', .1),
                      ('resources/images/misaka_sprites/StandR-2.png', .1),
-                     ('resources/images/misaka_sprites/StandR-0.png', .1))
+                     ('resources/images/misaka_sprites/StandR-3.png', .1))
         runRightTuple = (('resources/images/misaka_sprites/RunR-0.png', .1),
                          ('resources/images/misaka_sprites/RunR-1.png', .1),
                          ('resources/images/misaka_sprites/RunR-2.png', .1),

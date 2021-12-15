@@ -22,7 +22,7 @@ from Projectile import *
 
 ### 2 - Version, Screen, Clock, Sound Effects, and Music ###
 ## 2.1 - Version
-VERSION = "0.1"
+VERSION = "0.12"
 
 ## 2- Constants
 
