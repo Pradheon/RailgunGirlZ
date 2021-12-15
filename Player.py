@@ -183,7 +183,7 @@ class Player(object):
     # player takes damage from enemy AI
     def hit(self):
         if self.health > 0:
-            self.health -= .01
+            self.health -= .1
             #print('hit')
         else:
             self.visible = False

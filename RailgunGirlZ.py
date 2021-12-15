@@ -39,20 +39,23 @@ pygame.mixer.init()
 # 2.4.1 - Music
 background_music_k = pygame.mixer.Sound('resources/sounds/kontrolle.mp3')
 menu_music_s = pygame.mixer.Sound('resources/sounds/shopsation.mp3')
-pygame.mixer.set_num_channels(3)
+bullet_sfx = pygame.mixer.Sound('resources/sounds/bullet.mp3')
+hit_sfx = pygame.mixer.Sound('resources/sounds/hit.mp3')
+pygame.mixer.set_num_channels(4)
 menu_music = pygame.mixer.Channel(0)
 background_music = pygame.mixer.Channel(1)
 background_music.play(background_music_k, loops=-1, fade_ms=5000)
 menu_music.play(menu_music_s, loops=-1, fade_ms=5000)
 menu_music.pause()
+#bulletSFX.play(bullet_sfx)
+#hitSFX.play(hit_sfx)
 pygame.mixer.Sound.set_volume(menu_music_s, 0.1)
 pygame.mixer.Sound.set_volume(background_music_k, 0.1)
 # 2.4.2 - Sound Effects
-# projectile_shoot_sound = pygame.mixer.Sound()
-# projectile_hit_sound = pygame.mixer.Sound()
-# player_damage_sound = pygame.mixer.Sound()
-# enemyAI_damage_sound = pygame.mixer.Sound()
-
+bulletSFX = pygame.mixer.Channel(2)
+hitSFX = pygame.mixer.Channel(3)
+pygame.mixer.Sound.set_volume(bullet_sfx, 0.1)
+pygame.mixer.Sound.set_volume(hit_sfx, 0.1)
 
 ### 3 - Character Sprites / Images ###
 ## 3.1 - Background
@@ -101,12 +104,14 @@ while True:
         if oMeleeButton.handleEvent(event):
             if oEnemy.visible:
                 if enemyPlayerCollide:
-                    oEnemy.hit()
+                    oEnemy.meleeHit()
+                    hitSFX.play(hit_sfx)
 
         if oShootButton.handleEvent(event):
             center = oPlayer.getCenterRect()
             direction = oPlayer.getFacing()
             oProjectileMgr.newProjectile(center, direction)
+            bulletSFX.play(bullet_sfx)
 
 
     keyPressedTuple = pygame.key.get_pressed()
@@ -117,8 +122,8 @@ while True:
     if keyPressedTuple[pygame.K_RIGHT] or keyPressedTuple[pygame.K_d]:
         oBackground.update('right')
 
-    playerRect = oPlayer.getRect()
-    enemyRect = oEnemy.getRect()
+    playerRect = oPlayer.getHitboxRect()
+    enemyRect = oEnemy.getHitboxRect()
     enemyPlayerCollide = enemyRect.colliderect(playerRect)
 
     for oEnemy in enemyList:
@@ -131,10 +136,13 @@ while True:
                 if keyPressedTuple[pygame.K_j] or enemyProjectileCollide:
                     oEnemy.shootHit()
                     oProjectileMgr.removeProjectile()
-            if enemyPlayerCollide:
+                    hitSFX.play(hit_sfx)
+            if oPlayer.visible and enemyPlayerCollide:
                 oPlayer.hit()
+                hitSFX.play(hit_sfx)
             if keyPressedTuple[pygame.K_k] and enemyPlayerCollide:
                 oEnemy.meleeHit()
+                hitSFX.play(hit_sfx)
 
     oProjectileMgr.update()
     oPlayer.update()
